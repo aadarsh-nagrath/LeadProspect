@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
-import { Sparkles, ArrowLeft, Mail, Lock, User, Loader2 } from "lucide-react";
+import { Sparkles, ArrowLeft, Mail, Lock, User, Loader2, KeyRound } from "lucide-react";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -24,6 +24,7 @@ export default function LoginPage() {
   });
 
   const [verificationStep, setVerificationStep] = useState(false);
+  const [forgotPasswordStep, setForgotPasswordStep] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -47,6 +48,22 @@ export default function LoginPage() {
         }
         
         router.push("/dashboard");
+      } else if (forgotPasswordStep) {
+        // Forgot password - send reset email
+        const res = await fetch("/api/auth/forgot-password", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email: formData.email }),
+        });
+        
+        const data = await res.json();
+        
+        if (!res.ok) {
+          throw new Error(data.error);
+        }
+        
+        setSuccess(data.message);
+        setForgotPasswordStep(false);
       } else if (isLogin) {
         // Login
         const res = await fetch("/api/auth/login", {
@@ -91,7 +108,20 @@ export default function LoginPage() {
     setError("");
     setSuccess("");
     setVerificationStep(false);
+    setForgotPasswordStep(false);
     setFormData({ ...formData, code: "" });
+  };
+
+  const handleForgotPassword = () => {
+    setForgotPasswordStep(true);
+    setError("");
+    setSuccess("");
+  };
+
+  const handleBackToLogin = () => {
+    setForgotPasswordStep(false);
+    setError("");
+    setSuccess("");
   };
 
   return (
@@ -120,24 +150,28 @@ export default function LoginPage() {
             <CardTitle className="text-2xl font-bold">
               {verificationStep 
                 ? "Verify Your Email" 
-                : isLogin 
-                  ? "Welcome Back" 
-                  : "Create Account"
+                : forgotPasswordStep
+                  ? "Reset Password"
+                  : isLogin 
+                    ? "Welcome Back" 
+                    : "Create Account"
               }
             </CardTitle>
             <CardDescription>
               {verificationStep 
                 ? `Enter the 6-digit code sent to ${formData.email}`
-                : isLogin 
-                  ? "Sign in to your LeadProspect account"
-                  : "Start your 7-day free trial"
+                : forgotPasswordStep
+                  ? "Enter your email and we'll send you a new password"
+                  : isLogin 
+                    ? "Sign in to your LeadProspect account"
+                    : "Start your 7-day free trial"
               }
             </CardDescription>
           </CardHeader>
           
           <CardContent>
             <form onSubmit={handleSubmit} className="space-y-4">
-              {!isLogin && !verificationStep && (
+              {!verificationStep && !forgotPasswordStep && !isLogin && (
                 <div className="space-y-2">
                   <label className="text-sm font-medium">Full Name</label>
                   <div className="relative">
@@ -223,14 +257,16 @@ export default function LoginPage() {
                 {loading && <Loader2 className="w-4 h-4 mr-2 animate-spin" />}
                 {verificationStep 
                   ? "Verify & Continue" 
-                  : isLogin 
-                    ? "Sign In" 
-                    : "Create Account"
+                  : forgotPasswordStep
+                    ? "Send New Password"
+                    : isLogin 
+                      ? "Sign In" 
+                      : "Create Account"
                 }
               </Button>
             </form>
             
-            {!verificationStep && (
+            {!verificationStep && !forgotPasswordStep && (
               <div className="mt-6 text-center">
                 <p className="text-sm text-muted-foreground">
                   {isLogin ? "Don't have an account?" : "Already have an account?"}
@@ -242,6 +278,17 @@ export default function LoginPage() {
                     {isLogin ? "Sign up" : "Sign in"}
                   </button>
                 </p>
+                {isLogin && (
+                  <p className="mt-2">
+                    <button
+                      type="button"
+                      onClick={handleForgotPassword}
+                      className="text-sm text-primary hover:underline"
+                    >
+                      Forgot Password?
+                    </button>
+                  </p>
+                )}
               </div>
             )}
             
@@ -253,6 +300,18 @@ export default function LoginPage() {
                   className="text-sm text-muted-foreground hover:text-foreground"
                 >
                   ← Go back
+                </button>
+              </div>
+            )}
+
+            {forgotPasswordStep && (
+              <div className="mt-6 text-center">
+                <button
+                  type="button"
+                  onClick={handleBackToLogin}
+                  className="text-sm text-muted-foreground hover:text-foreground"
+                >
+                  ← Back to Login
                 </button>
               </div>
             )}

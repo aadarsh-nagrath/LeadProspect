@@ -17,11 +17,40 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Find user with matching code
+    // Find user with matching code (compare as strings)
     const user = await User.findOne({
       email: email.toLowerCase(),
-      verificationCode: code,
+      verificationCode: String(code),
     });
+
+    // Check if user is already verified
+    const existingUser = await User.findOne({ email: email.toLowerCase() });
+    if (existingUser && existingUser.isVerified) {
+      // User already verified, just log them in
+      const token = jwt.sign(
+        { userId: existingUser._id, email: existingUser.email, name: existingUser.name },
+        process.env.JWT_SECRET!,
+        { expiresIn: '7d' }
+      );
+
+      const response = NextResponse.json(
+        { 
+          message: 'Already verified!',
+          user: { id: existingUser._id, email: existingUser.email, name: existingUser.name }
+        },
+        { status: 200 }
+      );
+
+      response.cookies.set('auth-token', token, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production',
+        sameSite: 'lax',
+        maxAge: 60 * 60 * 24 * 7,
+        path: '/',
+      });
+
+      return response;
+    }
 
     if (!user) {
       return NextResponse.json(

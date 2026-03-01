@@ -211,12 +211,16 @@ function Navigation() {
 
           {/* CTA Buttons */}
           <div className="hidden md:flex items-center gap-3">
-            <Button variant="ghost" size="sm" className="text-muted-foreground">
-              Log in
-            </Button>
-            <Button size="sm" className="bg-primary hover:bg-primary/90 text-primary-foreground font-medium">
-              Start Free Trial
-            </Button>
+            <Link href="/login">
+              <Button variant="ghost" size="sm" className="text-muted-foreground">
+                Log in
+              </Button>
+            </Link>
+            <Link href="/login">
+              <Button size="sm" className="bg-primary hover:bg-primary/90 text-primary-foreground font-medium">
+                Start Free Trial
+              </Button>
+            </Link>
           </div>
 
           {/* Mobile Menu Button */}
@@ -243,8 +247,8 @@ function Navigation() {
               Pricing
             </Link>
             <div className="pt-3 space-y-2">
-              <Button variant="ghost" className="w-full">Log in</Button>
-              <Button className="w-full bg-primary">Start Free Trial</Button>
+              <Link href="/login"><Button variant="ghost" className="w-full">Log in</Button></Link>
+              <Link href="/login"><Button className="w-full bg-primary">Start Free Trial</Button></Link>
             </div>
           </div>
         </div>
