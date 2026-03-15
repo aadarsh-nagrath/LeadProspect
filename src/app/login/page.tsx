@@ -47,7 +47,7 @@ export default function LoginPage() {
           throw new Error(data.error);
         }
         
-        router.push("/dashboard");
+        window.location.href = "/dashboard";
       } else if (forgotPasswordStep) {
         // Forgot password - send reset email
         const res = await fetch("/api/auth/forgot-password", {
@@ -78,7 +78,7 @@ export default function LoginPage() {
           throw new Error(data.error);
         }
         
-        router.push("/dashboard");
+        window.location.href = "/dashboard";
       } else {
         // Register
         const res = await fetch("/api/auth/register", {

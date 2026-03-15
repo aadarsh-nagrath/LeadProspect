@@ -3,6 +3,7 @@
 import { useState } from "react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
+import { useRouter } from "next/navigation"
 import {
   Sidebar,
   SidebarContent,
@@ -57,11 +58,29 @@ const footerItemIcons: Record<SidebarFooterItemId, React.ComponentType<{ classNa
   help: Question,
 }
 
-export function AppSidebar() {
+interface User {
+  id: string;
+  name: string;
+  email: string;
+}
+
+interface AppSidebarProps {
+  user?: User | null;
+}
+
+export function AppSidebar({ user }: AppSidebarProps) {
+  const router = useRouter()
   const pathname = usePathname()
   const [isSettingsOpen, setIsSettingsOpen] = useState(false)
   const [isAuthOpen, setIsAuthOpen] = useState(false)
   const [authMode, setAuthMode] = useState<AuthMode>("sign-in")
+
+  const handleLogout = async () => {
+    try {
+      await fetch("/api/auth/logout", { method: "POST" });
+    } catch (e) {}
+    router.push("/?auth=sign-in");
+  };
 
   const openAuth = (mode: AuthMode) => {
     setAuthMode(mode)
@@ -215,11 +234,11 @@ export function AppSidebar() {
             >
               <Avatar className="h-8 w-8">
                 <AvatarImage src="/avatar-profile.jpg" />
-                <AvatarFallback>JD</AvatarFallback>
+                <AvatarFallback>{user?.name ? user.name.split(" ").map((n: string) => n[0]).join("").toUpperCase() : "U"}</AvatarFallback>
               </Avatar>
               <div className="flex flex-1 flex-col">
-                <span className="text-sm font-medium">Jason D</span>
-                <span className="text-xs text-muted-foreground">jason.duong@mail.com</span>
+                <span className="text-sm font-medium">{user?.name || "User"}</span>
+                <span className="text-xs text-muted-foreground">{user?.email || "user@email.com"}</span>
               </div>
               <CaretRight className="h-4 w-4 text-muted-foreground" />
             </button>
@@ -227,7 +246,7 @@ export function AppSidebar() {
           <DropdownMenuContent side="right" align="end" className="w-40">
             <DropdownMenuItem
               className="cursor-pointer text-destructive focus:text-destructive"
-              onSelect={() => openAuth("sign-in")}
+              onSelect={handleLogout}
             >
               <SignOut className="h-4 w-4" />
               Logout
@@ -236,7 +255,7 @@ export function AppSidebar() {
         </DropdownMenu>
       </SidebarFooter>
 
-      <SettingsDialog open={isSettingsOpen} onOpenChange={setIsSettingsOpen} />
+      <SettingsDialog open={isSettingsOpen} onOpenChange={setIsSettingsOpen} user={user} />
       <AuthDialog
         open={isAuthOpen}
         onOpenChange={setIsAuthOpen}

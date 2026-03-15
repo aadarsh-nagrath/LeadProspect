@@ -4,7 +4,6 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { SidebarProvider, SidebarInset } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/app-sidebar";
-import { ProjectsContent } from "@/components/projects-content";
 
 interface User {
   id: string;
@@ -12,7 +11,11 @@ interface User {
   email: string;
 }
 
-export default function DashboardPage() {
+interface DashboardLayoutProps {
+  children: React.ReactNode;
+}
+
+export default function DashboardLayout({ children }: DashboardLayoutProps) {
   const router = useRouter();
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
@@ -43,20 +46,13 @@ export default function DashboardPage() {
         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
       </div>
     );
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
-      </div>
-    );
   }
 
   return (
     <SidebarProvider>
       <AppSidebar user={user} />
       <SidebarInset>
-        <div className="p-6">
-          <ProjectsContent />
-        </div>
+        {children}
       </SidebarInset>
     </SidebarProvider>
   );

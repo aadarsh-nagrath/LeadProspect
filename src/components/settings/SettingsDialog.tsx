@@ -85,7 +85,14 @@ const settingsItemIcons: Record<string, React.ComponentType<{ className?: string
 
 type SettingsItemId = (typeof settingsSections)[number]["items"][number]["id"]
 
+interface User {
+  id: string;
+  name: string;
+  email: string;
+}
+
 type SettingsDialogProps = {
+    user?: User | null;
     open: boolean
     onOpenChange: (open: boolean) => void
 }
@@ -166,7 +173,7 @@ function TeammatesSettingsPane() {
     )
 }
 
-export function SettingsDialog({ open, onOpenChange }: SettingsDialogProps) {
+export function SettingsDialog({ open, onOpenChange, user }: SettingsDialogProps) {
     const [activeItemId, setActiveItemId] = useState<SettingsItemId>("account")
 
     return (
@@ -211,7 +218,7 @@ export function SettingsDialog({ open, onOpenChange }: SettingsDialogProps) {
                     </aside>
 
                     <main className="flex-1 min-h-0 overflow-y-auto px-6 py-6 sm:min-h-0">
-                        {activeItemId === "account" && <AccountSettingsPane />}
+                        {activeItemId === "account" && <AccountSettingsPane user={user} />}
                         {activeItemId === "notifications" && <NotificationsSettingsPane />}
                         {activeItemId === "preferences" && <PreferencesSettingsPane />}
                         {activeItemId === "teammates" && <TeammatesSettingsPane />}
@@ -240,7 +247,7 @@ export function SettingsDialog({ open, onOpenChange }: SettingsDialogProps) {
     )
 }
 
-function AccountSettingsPane() {
+function AccountSettingsPane({ user }: { user?: User | null }) {
     const fileInputRef = useRef<HTMLInputElement | null>(null)
     const [photoPreview, setPhotoPreview] = useState("/avatar-profile.jpg")
     const [objectUrl, setObjectUrl] = useState<string | null>(null)
@@ -323,7 +330,7 @@ function AccountSettingsPane() {
                     <Input defaultValue="Khánh Dương" className="h-9 text-sm" />
                 </SettingRow>
                 <SettingRow label="Email address" description="Notifications will be sent to this address.">
-                    <Input defaultValue="duongdaikhanh2502@gmail.com" type="email" className="h-9 text-sm" readOnly />
+                    <Input defaultValue={user?.email ?? ""} type="email" className="h-9 text-sm" readOnly />
                 </SettingRow>
                 <SettingRow label="Password" description="Last changed 2 months ago.">
                     <div className="flex items-center justify-between gap-3 rounded-md border border-input bg-muted/40 px-3 py-2 text-sm text-muted-foreground">
