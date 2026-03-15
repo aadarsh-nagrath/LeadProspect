@@ -1,4 +1,4 @@
-export type NavItemId = "inbox" | "my-tasks" | "projects" | "clients" | "performance"
+export type NavItemId = "inbox" | "campaigns" | "projects" | "clients" | "performance"
 
 export type SidebarFooterItemId = "settings" | "templates" | "help"
 
@@ -23,7 +23,7 @@ export type SidebarFooterItem = {
 
 export const navItems: NavItem[] = [
     { id: "inbox", label: "Inbox", badge: 24 },
-    { id: "my-tasks", label: "My task" },
+    { id: "campaigns", label: "Campaigns" },
     { id: "projects", label: "Projects", isActive: true },
     { id: "clients", label: "Clients" },
     { id: "performance", label: "Performance" },

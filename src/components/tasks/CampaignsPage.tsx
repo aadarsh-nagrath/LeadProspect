@@ -39,7 +39,7 @@ import { ViewOptionsPopover } from "@/components/view-options-popover"
 import { cn } from "@/lib/utils"
 import { TaskQuickCreateModal, type CreateTaskContext } from "@/components/tasks/TaskQuickCreateModal"
 
-export function MyTasksPage() {
+export function CampaignsPage() {
   const [groups, setGroups] = useState<ProjectTaskGroup[]>(() => {
     return projects
       .map((project) => {
@@ -220,8 +220,8 @@ export function MyTasksPage() {
       <div className="flex flex-1 flex-col min-h-0 bg-background mx-2 my-2 border border-border rounded-lg min-w-0">
         <div className="flex items-center justify-between px-4 py-4 border-b border-border/70">
           <div className="space-y-1">
-            <h1 className="text-lg font-semibold tracking-tight">Tasks</h1>
-            <p className="text-xs text-muted-foreground">No tasks available yet.</p>
+            <h1 className="text-lg font-semibold tracking-tight">Campaigns</h1>
+            <p className="text-xs text-muted-foreground">No campaigns available yet.</p>
           </div>
         </div>
       </div>
@@ -234,7 +234,7 @@ export function MyTasksPage() {
         <div className="flex items-center justify-between px-4 py-3 border-b border-border/70">
           <div className="flex items-center gap-3">
             <SidebarTrigger className="h-8 w-8 rounded-lg hover:bg-accent text-muted-foreground" />
-            <p className="text-base font-medium text-foreground">Tasks</p>
+            <p className="text-base font-medium text-foreground">Campaigns</p>
           </div>
           <div className="flex items-center gap-2">
             <Button
@@ -243,7 +243,7 @@ export function MyTasksPage() {
               onClick={() => openCreateTask()}
             >
               <Plus className="mr-1.5 h-4 w-4" />
-              New Task
+              New Campaign
             </Button>
           </div>
         </div>

@@ -46,7 +46,7 @@ import { AuthDialog, type AuthMode } from "@/components/auth/AuthDialog"
 
 const navItemIcons: Record<NavItemId, React.ComponentType<{ className?: string }>> = {
   inbox: Tray,
-  "my-tasks": CheckSquare,
+  campaigns: CheckSquare,
   projects: Folder,
   clients: Users,
   performance: ChartBar,
@@ -88,7 +88,7 @@ export function AppSidebar({ user }: AppSidebarProps) {
   }
 
   const getHrefForNavItem = (id: NavItemId): string => {
-    if (id === "my-tasks") return "/tasks"
+    if (id === "campaigns") return "/campaigns"
     if (id === "projects") return "/projects"
     if (id === "inbox") return "/inbox"
     if (id === "clients") return "/clients"
@@ -100,8 +100,8 @@ export function AppSidebar({ user }: AppSidebarProps) {
     if (id === "projects") {
       return pathname.startsWith("/projects")
     }
-    if (id === "my-tasks") {
-      return pathname.startsWith("/tasks")
+    if (id === "campaigns") {
+      return pathname.startsWith("/campaigns")
     }
     if (id === "inbox") {
       return pathname.startsWith("/inbox")

@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { SidebarProvider, SidebarInset } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/app-sidebar";
-import { MyTasksPage } from "@/components/tasks/MyTasksPage";
+import { CampaignsPage } from "@/components/tasks/CampaignsPage";
 
 interface User {
   id: string;
@@ -12,7 +12,7 @@ interface User {
   email: string;
 }
 
-export default function TasksPage() {
+export default function CampaignsRoute() {
   const router = useRouter();
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
@@ -43,11 +43,6 @@ export default function TasksPage() {
         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
       </div>
     );
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
-      </div>
-    );
   }
 
   return (
@@ -55,7 +50,7 @@ export default function TasksPage() {
       <AppSidebar user={user} />
       <SidebarInset>
         <div className="p-6">
-          <MyTasksPage />
+          <CampaignsPage />
         </div>
       </SidebarInset>
     </SidebarProvider>
