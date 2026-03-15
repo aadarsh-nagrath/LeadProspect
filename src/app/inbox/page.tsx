@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { SidebarProvider, SidebarInset } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/app-sidebar";
+import { InboxPage as InboxComponent } from "@/components/inbox/InboxPage";
 
 interface User {
   id: string;
@@ -42,19 +43,14 @@ export default function InboxPage() {
         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
       </div>
     );
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
-      </div>
-    );
   }
 
   return (
     <SidebarProvider>
       <AppSidebar user={user} />
       <SidebarInset>
-        <div className="p-6">
-          <InboxPage />
+        <div className="flex-1 flex flex-col min-h-0 h-screen overflow-hidden">
+          <InboxComponent />
         </div>
       </SidebarInset>
     </SidebarProvider>

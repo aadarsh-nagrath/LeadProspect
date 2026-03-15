@@ -39,3 +39,13 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# docker
+.dockerignore
+
+# local env files
+.env*.local
+
+# OS files
+.DS_Store
+Thumbs.db

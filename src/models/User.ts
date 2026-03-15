@@ -7,6 +7,14 @@ export interface IUser extends Document {
   isVerified: boolean;
   verificationCode?: string;
   verificationCodeExpires?: Date;
+  profilePhoto?: string;
+  theme?: string;
+  openLinksInApp?: boolean;
+  timezone?: string;
+  startWeekOn?: string;
+  apiToken?: string;
+  workspaceLogo?: string;
+  plan?: string;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -43,6 +51,41 @@ const UserSchema = new Schema<IUser>(
     verificationCodeExpires: {
       type: Date,
       select: false,
+    },
+    profilePhoto: {
+      type: String,
+      default: '',
+    },
+    theme: {
+      type: String,
+      enum: ['Light', 'Dark', 'System'],
+      default: 'System',
+    },
+    openLinksInApp: {
+      type: Boolean,
+      default: true,
+    },
+    timezone: {
+      type: String,
+      default: 'UTC',
+    },
+    startWeekOn: {
+      type: String,
+      enum: ['Monday', 'Sunday'],
+      default: 'Monday',
+    },
+    apiToken: {
+      type: String,
+      select: false,
+    },
+    workspaceLogo: {
+      type: String,
+      default: '',
+    },
+    plan: {
+      type: String,
+      enum: ['Free', 'Pro', 'Enterprise'],
+      default: 'Pro',
     },
   },
   {

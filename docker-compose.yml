@@ -1,0 +1,39 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "3001:3000" # Changed from 3000:3000 to avoid conflict with host app
+    env_file:
+      - .env
+    environment:
+      - MONGODB_URI=mongodb://mongo:27017/leadprospect
+      - GOOGLE_APPLICATION_CREDENTIALS=/app/gcp-acc.json
+    volumes:
+      - ~/.config/gcloud/application_default_credentials.json:/app/gcp-acc.json:ro
+    depends_on:
+      - mongo
+    restart: always
+
+  mongo:
+    image: mongo:latest
+    ports:
+      - "27018:27017" # Changed from 27017:27017 to avoid conflict with host mongo
+    volumes:
+      - mongodb_data:/data/db
+    restart: always
+
+  mongo-express:
+    image: mongo-express:latest
+    ports:
+      - "8081:8081"
+    environment:
+      - ME_CONFIG_MONGODB_SERVER=mongo
+      - ME_CONFIG_MONGODB_PORT=27017
+    depends_on:
+      - mongo
+    restart: always
+
+volumes:
+  mongodb_data:
